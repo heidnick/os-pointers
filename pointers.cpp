@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdio.h>
+#include <iomanip>
 
 
 typedef struct Student {
@@ -23,7 +24,7 @@ int main(int argc, char **argv)
 
     // Sequence of user input -> store in fields of `student`
     //ID
-    /*student.id = promptInt("Please enter the student's id number: ", 0, 999999999);
+    student.id = promptInt("Please enter the student's id number: ", 0, 999999999);
 
     //FIRST LAST NAME
     student.f_name = new char[128];
@@ -32,9 +33,10 @@ int main(int argc, char **argv)
     std::cin.getline(student.f_name, 128);
     std::cout << "Please enter the student's last name: ";
     std::cin.getline(student.l_name, 128);
-    */
+    
     //NUM ASSIGNMENTS
     student.n_assignments = promptInt("Please enter how many assignments were graded: ", 1, 134217728);
+    std::cout << std::endl;
 
     //GRADES
     student.grades = new double[student.n_assignments];
@@ -45,11 +47,15 @@ int main(int argc, char **argv)
         student.grades[i] = promptDouble(temp, 0.0, 1000.0);
         temp = "Please enter grade for assignment ";
     }
+    std::cout << std::endl;
 
-    // Call `CalculateStudentAverage(???, ???)`
-    calculateStudentAverage(student.grades, &average);
-    // Output `average`
-    std::cout << average << std::endl;
+    //CALCULATE CALL
+    calculateStudentAverage(&student, &average);
+    
+    //FINAL OUTPUT
+    std::cout << "Student: Jane Doe [" << student.id << "]" << std::endl;
+    std::cout << "  Average grade: ";
+    std::cout << std::fixed << std::setprecision(1) << average << std::endl;
     return 0;
 }
 
@@ -136,5 +142,17 @@ double promptDouble(std::string message, double min, double max)
 void calculateStudentAverage(void *object, double *avg)
 {
     // Code to calculate and store average grade
+    //double *arr = *((double**)object);
+    Student *student = static_cast<Student*>(object);
+
+    double sum;
     
+    for (int i=0; i<student->n_assignments; i++){
+        sum += student->grades[i];
+    }
+    //std::cout << arr[2] << "\n";
+    
+    *avg = sum/student->n_assignments;
+    //const double rounded = static_cast<double>((*avg * 10 + 0.5) / 10.0);
+    //*avg = rounded;
 }
